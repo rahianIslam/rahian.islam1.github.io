@@ -192,23 +192,37 @@
     /* ── CLUBS ── */
     #clubs { background: var(--surface); }
     .clubs-inner { max-width: 1200px; margin: 0 auto; }
-    .club-item { display: grid; grid-template-columns: 60px 1fr auto; align-items: start; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .club-item { display: flex; align-items: flex-start; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .club-item:last-child { border-bottom: none; }
-    .club-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: rgba(201,151,58,0.15); line-height: 1; }
+    .club-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: rgba(201,151,58,0.15); line-height: 1; flex-shrink: 0; width: 60px; }
+    .club-body { flex: 1; }
     .club-body h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: .05em; color: #fff; line-height: 1.1; margin-bottom: .5rem; }
-    .club-body p { color: var(--muted); font-size: .9rem; line-height: 1.75; max-width: 680px; }
+    .club-body p { color: var(--muted); font-size: .9rem; line-height: 1.75; max-width: 580px; }
     .club-period { font-family: 'JetBrains Mono', monospace; font-size: .63rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
 
     /* ── INTERESTS ── */
     #interests { background: var(--bg); }
     .interests-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
-    .interest-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem 1.8rem; border-radius: 2px; position: relative; overflow: hidden; transition: transform .3s, box-shadow .3s; }
-    .interest-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,151,58,0.04), transparent); opacity: 0; transition: opacity .3s; }
+    .interest-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; position: relative; overflow: hidden; transition: transform .3s, box-shadow .3s; }
     .interest-card:hover { transform: translateY(-6px); box-shadow: var(--glow); }
-    .interest-card:hover::after { opacity: 1; }
-    .interest-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
-    .interest-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .06em; color: #fff; margin-bottom: .75rem; }
+    .interest-card-img { width: 100%; height: 180px; object-fit: cover; display: block; filter: grayscale(30%) brightness(0.75); transition: filter .4s, transform .4s; }
+    .interest-card:hover .interest-card-img { filter: grayscale(0) brightness(1); transform: scale(1.04); }
+    .interest-card-body { padding: 1.5rem 1.8rem; }
+    .interest-icon { font-size: 1.6rem; margin-bottom: .8rem; display: block; }
+    .interest-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .06em; color: #fff; margin-bottom: .6rem; }
     .interest-card p { color: var(--muted); font-size: .88rem; line-height: 1.7; }
+
+    /* ── ENTREPRENEURIAL IMAGES ── */
+    .ent-card-img { width: 100%; height: 200px; object-fit: cover; display: block; filter: grayscale(25%) brightness(0.75); transition: filter .4s; margin-bottom: 0; }
+    .ent-card:hover .ent-card-img { filter: grayscale(0) brightness(0.9); }
+    .ent-card-img-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; margin-bottom: 0; }
+    .ent-card-img-row img { width: 100%; height: 100px; object-fit: cover; display: block; filter: grayscale(25%) brightness(0.75); transition: filter .4s; }
+    .ent-card:hover .ent-card-img-row img { filter: grayscale(0) brightness(0.9); }
+    .ent-card-content { padding: 2rem 2.5rem 2.5rem; }
+
+    /* ── CLUB IMAGES ── */
+    .club-item-img { width: 260px; height: 160px; object-fit: cover; flex-shrink: 0; filter: grayscale(25%) brightness(0.75); border: 1px solid var(--border); transition: filter .4s; }
+    .club-item:hover .club-item-img { filter: grayscale(0) brightness(1); }
 
     /* ── CONTACT ── */
     #contact { background: var(--surface); text-align: center; }
@@ -240,6 +254,7 @@
       .exp-img, .exp-img-ph { min-height: 240px; }
       .interests-grid { grid-template-columns: repeat(2,1fr); }
       .skills-grid { grid-template-columns: 1fr 1fr; }
+      .club-item-img { width: 180px; height: 130px; }
     }
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -251,7 +266,8 @@
       .hero-scroll { left: 1.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .ent-grid { grid-template-columns: 1fr; }
-      .club-item { grid-template-columns: 1fr; gap: .75rem; }
+      .club-item { flex-wrap: wrap; }
+      .club-item-img { width: 100%; height: 180px; }
       .contact-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: .75rem; text-align: center; padding: 1.5rem; }
       .skills-grid { grid-template-columns: 1fr; }
@@ -520,16 +536,27 @@
     <h2 class="section-title reveal reveal-delay-1">ENTREPRENEURIAL<br /><span>EXPERIENCE</span></h2>
     <div class="section-divider reveal reveal-delay-1"></div>
     <div class="ent-grid">
-      <div class="ent-card reveal reveal-delay-2">
-        <div class="ent-period">Sep 2016 — Dec 2019</div>
-        <h3>SHUDIPTO FOUNDATION</h3>
-        <p>Co-founded a nonprofit social welfare organization in Dhaka, Bangladesh, dedicated to uplifting underprivileged communities. Organized donation drives, community outreach programs, and educational initiatives that improved the lives of hundreds of families in the capital. Managed fundraising and coordinated volunteers across multiple events.</p>
-        <a href="https://www.facebook.com/shudipto.foundation" class="ent-link" target="_blank">Visit Foundation</a>
+      <div class="ent-card reveal reveal-delay-2" style="padding:0;overflow:hidden;">
+        <img class="ent-card-img" src="images/Shupto M.jpg" alt="Shudipto Foundation" />
+        <div class="ent-card-img-row">
+          <img src="images/Shudipto.jpeg" alt="Shudipto Foundation" />
+          <img src="images/ShudiptoLOGO.jpeg" alt="Shudipto Logo" />
+          <img src="images/Shudipto1.jpg" alt="Shudipto Foundation" />
+        </div>
+        <div class="ent-card-content">
+          <div class="ent-period">Sep 2016 — Dec 2019</div>
+          <h3>SHUDIPTO FOUNDATION</h3>
+          <p>Co-founded a nonprofit social welfare organization in Dhaka, Bangladesh, dedicated to uplifting underprivileged communities. Organized donation drives, community outreach programs, and educational initiatives that improved the lives of hundreds of families in the capital. Managed fundraising and coordinated volunteers across multiple events.</p>
+          <a href="https://www.facebook.com/shudipto.foundation" class="ent-link" target="_blank">Visit Foundation</a>
+        </div>
       </div>
-      <div class="ent-card reveal reveal-delay-3">
-        <div class="ent-period">Jul 2015 — Jun 2018</div>
-        <h3>APHELION TUTORING CENTRE</h3>
-        <p>Co-founded and operated a tutoring centre at age 18, growing it to serve over <strong style="color:var(--text)">250 students</strong> from grades 5–8. Designed structured lesson plans, hired and managed a team of tutors, and built a reputation for measurable academic improvement — delivering first-hand lessons in operations, team management, and entrepreneurship.</p>
+      <div class="ent-card reveal reveal-delay-3" style="padding:0;overflow:hidden;">
+        <img class="ent-card-img" src="images/Aphelion.jpg" alt="Aphelion Tutoring Centre" />
+        <div class="ent-card-content">
+          <div class="ent-period">Jul 2015 — Jun 2018</div>
+          <h3>APHELION TUTORING CENTRE</h3>
+          <p>Co-founded and operated a tutoring centre at age 18, growing it to serve over <strong style="color:var(--text)">250 students</strong> from grades 5–8. Designed structured lesson plans, hired and managed a team of tutors, and built a reputation for measurable academic improvement — delivering first-hand lessons in operations, team management, and entrepreneurship.</p>
+        </div>
       </div>
       <div class="ent-card reveal reveal-delay-2" style="background:var(--surface2)">
         <div class="ent-period">2019 — 2020</div>
@@ -557,6 +584,7 @@
         <h3>RELECTRIC — MECHANICAL TEAM MEMBER</h3>
         <p>UCalgary student team developing electric conversion technology for gasoline vehicles. As a Mechanical Sub-Team member, I collaborated on the design, prototyping, and integration of drivetrain and chassis components — applying machine design, materials science, and manufacturing principles to a real road-going vehicle.</p>
       </div>
+      <img class="club-item-img" src="images/Relectric.jpg" alt="Relectric" />
       <div class="club-period">Since Sep 2019</div>
     </div>
     <div class="club-item reveal reveal-delay-1">
@@ -565,6 +593,7 @@
         <h3>SCHULICH DYNOBYTES — PROGRAMMER</h3>
         <p>Robotics club at Schulich focused on AI and computer vision on NAO humanoid robots. Developed Python-based algorithms for object detection, environment mapping, and autonomous decision-making — sitting at the intersection of mechanical systems and intelligent software.</p>
       </div>
+      <img class="club-item-img" src="images/Robotics.jpg" alt="Schulich Dynobytes" />
       <div class="club-period">Since Jan 2020</div>
     </div>
   </div>
@@ -579,24 +608,36 @@
   </div>
   <div class="interests-grid">
     <div class="interest-card reveal reveal-delay-1">
-      <span class="interest-icon">🎸</span>
-      <h3>MUSIC</h3>
-      <p>Self-taught guitarist and singer since 2011. Won "Desi's Got Talent" in 2019 at UCalgary and has since performed at multiple university events and radio shows. Music is how the engineer's brain switches off.</p>
+      <img class="interest-card-img" src="images/Music.jpg" alt="Music" />
+      <div class="interest-card-body">
+        <span class="interest-icon">🎸</span>
+        <h3>MUSIC</h3>
+        <p>Self-taught guitarist and singer since 2011. Won "Desi's Got Talent" in 2019 at UCalgary and has since performed at multiple university events and radio shows. Music is how the engineer's brain switches off.</p>
+      </div>
     </div>
     <div class="interest-card reveal reveal-delay-2">
-      <span class="interest-icon">🏏</span>
-      <h3>SPORTS</h3>
-      <p>Right-hand medium-fast bowler for <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League (CDCL). Squash obsessive. Also plays badminton, table tennis, football, and tennis.</p>
+      <img class="interest-card-img" src="images/Cricket.jpg" alt="Sports" />
+      <div class="interest-card-body">
+        <span class="interest-icon">🏏</span>
+        <h3>SPORTS</h3>
+        <p>Right-hand medium-fast bowler for <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League (CDCL). Squash obsessive. Also plays badminton, table tennis, football, and tennis.</p>
+      </div>
     </div>
     <div class="interest-card reveal reveal-delay-3">
-      <span class="interest-icon">🚗</span>
-      <h3>CAR ENTHUSIAST</h3>
-      <p>Japanese sports car fanboy turned European driver — currently behind the wheel of a 2008 BMW 323i. Loves hands-on maintenance. Dream car: 1998 Nissan Skyline GTR R34.</p>
+      <img class="interest-card-img" src="images/cars.jpeg" alt="Cars" />
+      <div class="interest-card-body">
+        <span class="interest-icon">🚗</span>
+        <h3>CAR ENTHUSIAST</h3>
+        <p>Japanese sports car fanboy turned European driver — currently behind the wheel of a 2008 BMW 323i. Loves hands-on maintenance. Dream car: 1998 Nissan Skyline GTR R34.</p>
+      </div>
     </div>
     <div class="interest-card reveal reveal-delay-4">
-      <span class="interest-icon">⌚</span>
-      <h3>WATCH COLLECTOR</h3>
-      <p>A grandfather's 1966 Omega Constellation started it all. Proud owner of an <strong style="color:var(--text)">Omega Seamaster 300m Chronograph</strong> (2017). The dream piece: Patek Philippe Nautilus 5711.</p>
+      <img class="interest-card-img" src="images/Watch.jpeg" alt="Watches" />
+      <div class="interest-card-body">
+        <span class="interest-icon">⌚</span>
+        <h3>WATCH COLLECTOR</h3>
+        <p>A grandfather's 1966 Omega Constellation started it all. Proud owner of an <strong style="color:var(--text)">Omega Seamaster 300m Chronograph</strong> (2017). The dream piece: Patek Philippe Nautilus 5711.</p>
+      </div>
     </div>
   </div>
 </section>
