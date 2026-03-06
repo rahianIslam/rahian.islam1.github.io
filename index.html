@@ -200,8 +200,72 @@
     .club-body p { color: var(--muted); font-size: .9rem; line-height: 1.75; max-width: 580px; }
     .club-period { font-family: 'JetBrains Mono', monospace; font-size: .63rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
 
-    /* ── INTERESTS ── */
-    #interests { background: var(--bg); }
+    /* ── INTEREST CARD CURSOR ── */
+    .interest-card { cursor: pointer; }
+    .interest-card .interest-card-body::after {
+      content: 'Click to expand';
+      display: block;
+      margin-top: .75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); opacity: .6;
+    }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(4, 10, 6, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .35s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      max-width: 860px; width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      transform: scale(0.88) translateY(20px);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,151,58,0.08);
+    }
+    .modal-overlay.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+    .modal-img {
+      width: 100%; height: 420px; object-fit: cover;
+      display: block;
+      filter: brightness(0.9);
+    }
+    .modal-body {
+      padding: 2.5rem 3rem 3rem;
+    }
+    .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: .06em; color: #fff;
+      margin-bottom: 1.2rem; line-height: 1;
+    }
+    .modal-title span { color: var(--gold-lt); }
+    .modal-text {
+      color: var(--muted); font-size: 1.05rem; line-height: 1.85;
+    }
+    .modal-text strong { color: var(--text); font-weight: 500; }
+    .modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 40px; height: 40px;
+      background: rgba(8,12,18,0.7); border: 1px solid var(--border);
+      color: var(--text); font-size: 1.1rem; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, color .2s;
+      border-radius: 2px;
+    }
+    .modal-close:hover { background: var(--gold); color: #080c12; }
     .interests-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
     .interest-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; position: relative; overflow: hidden; transition: transform .3s, box-shadow .3s; }
     .interest-card:hover { transform: translateY(-6px); box-shadow: var(--glow); }
@@ -607,7 +671,7 @@
     <div class="section-divider reveal reveal-delay-1"></div>
   </div>
   <div class="interests-grid">
-    <div class="interest-card reveal reveal-delay-1">
+    <div class="interest-card reveal reveal-delay-1" onclick="openModal('music')">
       <img class="interest-card-img" src="images/Music.jpg" alt="Music" />
       <div class="interest-card-body">
         <span class="interest-icon">🎸</span>
@@ -615,7 +679,7 @@
         <p>Self-taught guitarist and singer since 2011. Won "Desi's Got Talent" in 2019 at UCalgary and has since performed at multiple university events and radio shows. Music is how the engineer's brain switches off.</p>
       </div>
     </div>
-    <div class="interest-card reveal reveal-delay-2">
+    <div class="interest-card reveal reveal-delay-2" onclick="openModal('sports')">
       <img class="interest-card-img" src="images/Cricket.jpg" alt="Sports" />
       <div class="interest-card-body">
         <span class="interest-icon">🏏</span>
@@ -623,7 +687,7 @@
         <p>Right-hand medium-fast bowler for <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League (CDCL). Squash obsessive. Also plays badminton, table tennis, football, and tennis.</p>
       </div>
     </div>
-    <div class="interest-card reveal reveal-delay-3">
+    <div class="interest-card reveal reveal-delay-3" onclick="openModal('cars')">
       <img class="interest-card-img" src="images/cars.jpeg" alt="Cars" />
       <div class="interest-card-body">
         <span class="interest-icon">🚗</span>
@@ -631,7 +695,7 @@
         <p>Japanese sports car fanboy turned European driver — currently behind the wheel of a 2008 BMW 323i. Loves hands-on maintenance. Dream car: 1998 Nissan Skyline GTR R34.</p>
       </div>
     </div>
-    <div class="interest-card reveal reveal-delay-4">
+    <div class="interest-card reveal reveal-delay-4" onclick="openModal('watches')">
       <img class="interest-card-img" src="images/Watch.jpeg" alt="Watches" />
       <div class="interest-card-body">
         <span class="interest-icon">⌚</span>
@@ -641,6 +705,19 @@
     </div>
   </div>
 </section>
+
+<!-- ── INTEREST MODALS ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal-card" id="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img class="modal-img" id="modal-img" src="" alt="" />
+    <div class="modal-body">
+      <span class="modal-icon" id="modal-icon"></span>
+      <div class="modal-title" id="modal-title"></div>
+      <p class="modal-text" id="modal-text"></p>
+    </div>
+  </div>
+</div>
 
 <!-- ── CONTACT ── -->
 <section id="contact">
@@ -703,6 +780,56 @@
   window.addEventListener('scroll', () => {
     nav.style.padding = window.scrollY > 60 ? '.8rem 4rem' : '1.25rem 4rem';
   });
+
+  // ── INTEREST MODAL DATA ──
+  const modalData = {
+    music: {
+      img: 'images/Music.jpg',
+      icon: '🎸',
+      title: 'MUSIC',
+      text: `I've been a self-taught guitarist and singer since 2011 — YouTube was my music school. My father bought me my first guitar but refused formal lessons, believing it would distract from studies. That only made me more determined. After years of practicing, I entered <strong style="color:var(--text)">"Desi's Got Talent"</strong> in 2019, a show co-hosted by the Indian Students' Association and the Bengali Students' Society at the University of Calgary — and won. Since then I've been invited to perform at multiple campus events and radio shows. Music is how the engineer's brain resets.`
+    },
+    sports: {
+      img: 'images/Cricket.jpg',
+      icon: '🏏',
+      title: 'SPORTS',
+      text: `Cricket is in the blood. Five of my maternal uncles were professional cricketers, and I followed their footsteps from age 4. I've played multiple tournaments representing my school back in Bangladesh. Currently I play as a <strong style="color:var(--text)">right-hand medium-fast bowler for St. Johns 1</strong> in the Calgary District Cricket League (CDCL). My friends introduced me to squash in first year at UCalgary — and it instantly became my favourite sport. The pandemic hit hardest because I couldn't play. I also enjoy football, badminton, table tennis, and tennis. If you play any of these, we can be best friends.`
+    },
+    cars: {
+      img: 'images/cars.jpeg',
+      icon: '🚗',
+      title: 'CAR ENTHUSIAST',
+      text: `Initial D and The Fast and the Furious: Tokyo Drift turned me into a Japanese sports car fanboy for life. I love working on cars and helping friends and family with repairs and maintenance. Recently, my friend and I flew to Vancouver to pick up our summer cars — he got a <strong style="color:var(--text)">1994 Mazda Miata MX-5</strong> and I went European this time with a <strong style="color:var(--text)">2008 BMW 323i</strong>. My dream car remains a 1998 Nissan Skyline GTR R34 — though with prices skyrocketing, a Lamborghini might be more attainable at this point.`
+    },
+    watches: {
+      img: 'images/Watch.jpeg',
+      icon: '⌚',
+      title: 'WATCH COLLECTOR',
+      text: `My love for watches started when I saw my grandfather's <strong style="color:var(--text)">1966 Omega Constellation</strong> with a pie-pan dial. The patina, the petite case, the hand-winding movement — it completely awed me. I started collecting right after I began earning from my tutoring centre. I started with Seikos and Orients, then dove into the Swiss territory. My first luxury piece was an <strong style="color:var(--text)">Omega Seamaster Professional 300m Chronograph</strong>, acquired in 2017 — one of the proudest moments of my life and a reminder of what strong dedication can achieve. My dream watch: a Patek Philippe Nautilus 5711.`
+    }
+  };
+
+  function openModal(key) {
+    const d = modalData[key];
+    document.getElementById('modal-img').src = d.img;
+    document.getElementById('modal-img').alt = d.title;
+    document.getElementById('modal-icon').textContent = d.icon;
+    document.getElementById('modal-title').textContent = d.title;
+    document.getElementById('modal-text').innerHTML = d.text;
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOnBg(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
