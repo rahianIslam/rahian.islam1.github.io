@@ -316,6 +316,7 @@
       .exp-entry.flip .exp-img { order: 0; }
       .exp-entry.flip .exp-body { order: 0; }
       .exp-img, .exp-img-ph { min-height: 240px; }
+      .slideshow-wrap { min-height: 260px; transform: none; box-shadow: none; }
       .interests-grid { grid-template-columns: repeat(2,1fr); }
       .skills-grid { grid-template-columns: 1fr 1fr; }
       .club-item-img { width: 180px; height: 130px; }
@@ -340,9 +341,274 @@
       .interests-grid { grid-template-columns: 1fr; }
       .hero-name { font-size: 3.8rem; }
     }
+
+    /* ═══════════════════════════════════════════════
+       ULTRA-MODERN ENHANCEMENTS
+    ═══════════════════════════════════════════════ */
+
+    /* ── DISABLE CSS HERO ANIMATIONS (GSAP takes over) ── */
+    .hero-label, .hero-name, .hero-title, .hero-cta, .hero-scroll, .hero-stats {
+      animation: none !important;
+      opacity: 0;
+    }
+
+    /* ── CUSTOM CURSOR (pointer devices only) ── */
+    @media (hover: hover) and (pointer: fine) {
+      *, *::before, *::after { cursor: none !important; }
+    }
+    .cursor-dot {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold-lt);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width .18s ease, height .18s ease, background .18s ease, transform .18s ease, opacity .3s ease;
+      will-change: left, top;
+    }
+    .cursor-ring {
+      position: fixed; top: 0; left: 0; z-index: 9998;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(201,151,58,0.45);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width .3s ease, height .3s ease, border-color .3s ease, opacity .3s ease;
+      will-change: left, top;
+    }
+    .cursor-dot.hovered  { width: 14px; height: 14px; background: var(--gold); }
+    .cursor-ring.hovered { width: 56px; height: 56px; border-color: rgba(201,151,58,0.7); }
+    .cursor-dot.hidden, .cursor-ring.hidden { opacity: 0; }
+    @media (hover: none), (pointer: coarse) {
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; z-index: 201;
+      height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt), var(--gold));
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+      box-shadow: 0 0 10px rgba(201,151,58,0.6);
+      pointer-events: none;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    /* ── LOADER ── */
+    #loader {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.8rem;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      letter-spacing: .1em; color: #fff; line-height: 1;
+    }
+    .loader-name span { color: var(--gold-lt); }
+    .loader-bar-wrap {
+      width: 220px; height: 1px;
+      background: rgba(201,151,58,0.12);
+      position: relative; overflow: hidden;
+    }
+    .loader-bar-fill {
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
+      animation: loaderSweep 1.3s ease-in-out forwards;
+    }
+    @keyframes loaderSweep {
+      0%   { left: -100%; }
+      100% { left: 100%; }
+    }
+    .loader-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── PARTICLES CANVAS ── */
+    #particles-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    #noise-overlay {
+      position: fixed; inset: 0; z-index: 2;
+      pointer-events: none;
+      opacity: .032;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 250px 250px;
+    }
+
+    /* ── ACTIVE NAV LINK ── */
+    .nav-links a.nav-active { color: var(--gold-lt); }
+    .nav-links a.nav-active::after { transform: scaleX(1); }
+
+    /* ── MAGNETIC BUTTON ── */
+    .btn { will-change: transform; }
+
+    /* ── 3D TILT CARDS ── */
+    .ent-card, .interest-card, .contact-item {
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+
+    /* ── CLIP-PATH REVEAL ── */
+    .clip-img {
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path;
+    }
+    .clip-img.clip-done { clip-path: inset(0 0% 0 0); }
+
+    /* ── TYPEWRITER CURSOR ── */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: var(--gold);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink .7s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── SLIDESHOW ── */
+    .slideshow-wrap {
+      position: relative; overflow: hidden;
+      height: 100%; min-height: 340px;
+      /* fine grid + corner glows for the letterbox space */
+      background:
+        radial-gradient(ellipse at 18% 82%, rgba(201,151,58,0.10) 0%, transparent 52%),
+        radial-gradient(ellipse at 82% 18%, rgba(201,151,58,0.07) 0%, transparent 52%),
+        repeating-linear-gradient(0deg,   transparent, transparent 29px, rgba(201,151,58,0.055) 30px),
+        repeating-linear-gradient(90deg,  transparent, transparent 29px, rgba(201,151,58,0.055) 30px),
+        var(--surface2);
+      /* 3D lifted card — perspective tilt that lives inside overflow:hidden */
+      transform: perspective(900px) rotateX(3deg) rotateY(-2deg) scale(0.985);
+      transform-origin: 50% 100%;
+      transition: transform .55s cubic-bezier(.34,1.2,.64,1),
+                  box-shadow .55s ease;
+      /* layered inset glow to simulate depth edges */
+      box-shadow:
+        inset 0  2px 0   rgba(201,151,58,0.22),
+        inset 0 -4px 12px rgba(0,0,0,0.45),
+        inset  3px 0  8px rgba(0,0,0,0.25),
+        inset -3px 0  8px rgba(0,0,0,0.25);
+    }
+    .exp-entry:hover .slideshow-wrap {
+      transform: perspective(900px) rotateX(0deg) rotateY(0deg) scale(1);
+      box-shadow:
+        inset 0  2px 0   rgba(201,151,58,0.35),
+        inset 0 -2px 6px rgba(0,0,0,0.25),
+        inset  1px 0  4px rgba(0,0,0,0.12),
+        inset -1px 0  4px rgba(0,0,0,0.12);
+    }
+    .slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity .65s ease;
+      pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+    .slide img {
+      /* show at natural proportions — no crop */
+      max-width: calc(100% - 2rem);
+      max-height: calc(100% - 2rem);
+      width: auto; height: auto;
+      object-fit: contain; display: block;
+      filter: grayscale(15%) brightness(0.88) drop-shadow(0 8px 20px rgba(0,0,0,0.55));
+      transition: filter .45s, transform .45s;
+      border-radius: 2px;
+    }
+    .exp-entry:hover .slide.active img {
+      filter: grayscale(0) brightness(1) drop-shadow(0 12px 28px rgba(0,0,0,0.6));
+      transform: scale(1.03);
+    }
+    .slide-btn {
+      position: absolute; top: 50%; z-index: 10;
+      transform: translateY(-50%);
+      background: rgba(6,14,8,0.72);
+      border: 1px solid rgba(201,151,58,0.4);
+      color: var(--gold-lt);
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; line-height: 1;
+      cursor: pointer; border-radius: 2px;
+      transition: background .2s, border-color .2s, color .2s;
+      backdrop-filter: blur(6px);
+      padding: 0;
+    }
+    .slide-btn:hover { background: rgba(201,151,58,0.18); border-color: var(--gold); color: var(--gold); }
+    .slide-prev { left: .8rem; }
+    .slide-next { right: .8rem; }
+    .slide-dots {
+      position: absolute; bottom: .85rem; left: 0; right: 0;
+      display: flex; justify-content: center; gap: .5rem; z-index: 10;
+    }
+    .slide-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(201,151,58,0.25);
+      border: 1px solid rgba(201,151,58,0.45);
+      cursor: pointer;
+      transition: background .25s, transform .25s, border-color .25s;
+    }
+    .slide-dot.active { background: var(--gold-lt); border-color: var(--gold-lt); transform: scale(1.35); }
+    .slide-counter {
+      position: absolute; top: .8rem; right: .8rem; z-index: 10;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); background: rgba(6,14,8,0.65);
+      border: 1px solid rgba(201,151,58,0.2);
+      padding: .25rem .6rem; border-radius: 2px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      #loader { display: none !important; }
+      .cursor-dot, .cursor-ring, #noise-overlay { display: none !important; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+        cursor: auto !important;
+      }
+      .hero-label, .hero-name, .hero-title, .hero-cta, .hero-scroll, .hero-stats { opacity: 1 !important; }
+    }
   </style>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Lenis smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 </head>
 <body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-name">RAHIAN <span>ISLAM</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar-fill"></div></div>
+  <div class="loader-label">Loading Portfolio</div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- PARTICLES CANVAS -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- NOISE OVERLAY -->
+<div id="noise-overlay"></div>
 
 <!-- NAV -->
 <nav>
@@ -533,16 +799,22 @@
 
     <!-- ── TC ENERGY — TURBOMACHINERY ── -->
     <div class="exp-entry flip reveal reveal-delay-2">
-      <div class="exp-img">
-        <!--
-          Replace with: <img src="images/tc_turbo.jpg" alt="TC Energy Turbomachinery" />
-        -->
-        <div class="exp-img-ph">
-          <div class="ph-icon">🔩</div>
-          <div class="ph-co">TC Energy — Turbomachinery</div>
-          <div class="ph-hint">Add photo → images/tc_turbo.jpg</div>
+      <div class="slideshow-wrap" id="tc-turbo-slide">
+        <div class="slide active"><img src="images/TC2.jpeg"  alt="TC Energy Turbomachinery" /></div>
+        <div class="slide">        <img src="images/TC8.jpeg"  alt="TC Energy Turbomachinery" /></div>
+        <div class="slide">        <img src="images/TC11.jpeg" alt="TC Energy Turbomachinery" /></div>
+        <div class="slide">        <img src="images/TC12.jpeg" alt="TC Energy Turbomachinery" /></div>
+        <div class="slide">        <img src="images/TC18.jpeg" alt="TC Energy Turbomachinery" /></div>
+        <button class="slide-btn slide-prev" aria-label="Previous">&#8249;</button>
+        <button class="slide-btn slide-next" aria-label="Next">&#8250;</button>
+        <div class="slide-dots">
+          <span class="slide-dot active"></span>
+          <span class="slide-dot"></span>
+          <span class="slide-dot"></span>
+          <span class="slide-dot"></span>
+          <span class="slide-dot"></span>
         </div>
-        <span class="img-note">📸 Replace with photo</span>
+        <div class="slide-counter" id="tc-turbo-counter">1 / 5</div>
       </div>
       <div class="exp-body">
         <div class="exp-meta">
@@ -610,7 +882,7 @@
         <div class="ent-card-content">
           <div class="ent-period">Sep 2016 — Dec 2019</div>
           <h3>SHUDIPTO FOUNDATION</h3>
-          <p>Co-founded a nonprofit social welfare organization in Dhaka, Bangladesh, dedicated to uplifting underprivileged communities. Organized donation drives, community outreach programs, and educational initiatives that improved the lives of hundreds of families in the capital. Managed fundraising and coordinated volunteers across multiple events.</p>
+          <p>Co-founded a nonprofit in Dhaka, Bangladesh with a clear mission: invest in people who need it most. Over three years, the foundation ran donation drives, educational programs, and community outreach that reached hundreds of families across the capital. Alongside a dedicated team of volunteers, every event was organized from the ground up and every dollar raised went directly toward the people it was meant for.</p>
           <a href="https://www.facebook.com/shudipto.foundation" class="ent-link" target="_blank">Visit Foundation</a>
         </div>
       </div>
@@ -619,18 +891,18 @@
         <div class="ent-card-content">
           <div class="ent-period">Jul 2015 — Jun 2018</div>
           <h3>APHELION TUTORING CENTRE</h3>
-          <p>Co-founded and operated a tutoring centre at age 18, growing it to serve over <strong style="color:var(--text)">250 students</strong> from grades 5–8. Designed structured lesson plans, hired and managed a team of tutors, and built a reputation for measurable academic improvement — delivering first-hand lessons in operations, team management, and entrepreneurship.</p>
+          <p>Co-founded a tutoring centre at 18 that grew to serve over <strong style="color:var(--text)">250 students</strong> across grades 5 to 8. Designed the curriculum, built the lesson structure, and hired a team of tutors to scale operations beyond what one person could deliver. The experience was equal parts business school and engineering school, teaching operations, team leadership, and what it actually takes to build something people rely on.</p>
         </div>
       </div>
       <div class="ent-card reveal reveal-delay-2" style="background:var(--surface2)">
         <div class="ent-period">2019 — 2020</div>
         <h3>BENGALI STUDENTS' SOCIETY — CO-PRESIDENT</h3>
-        <p>Co-president of the BSS at UCalgary — overseeing all club activities, organizing cultural events, and co-hosting the annual "Desi's Got Talent" show with the Indian Students' Association. Managed a diverse executive team serving local and international Bengali students.</p>
+        <p>As Co-President of the Bengali Students' Society at UCalgary, led a diverse executive team serving hundreds of local and international Bengali students. Oversaw the full events calendar, coordinated cross-society partnerships, and co-hosted the annual Desi's Got Talent show with the Indian Students' Association. The role demanded exactly what good engineering does: clear communication, accountability, and getting people aligned on a shared goal.</p>
       </div>
       <div class="ent-card reveal reveal-delay-3" style="background:var(--surface2)">
         <div class="ent-period">Ongoing</div>
         <h3>LEADERSHIP &amp; PUBLIC SPEAKING</h3>
-        <p>Years of leading organisations, managing people, and performing on stage have built a rare combination of technical depth and interpersonal strength. Comfortable presenting to both technical and non-technical audiences, facilitating workshops, and representing organisations at inter-university events.</p>
+        <p>A decade of leading organizations, managing teams, and performing in front of audiences has built something textbooks rarely teach: the ability to communicate with genuine authority. Whether presenting technical findings to senior engineers or hosting a cultural show for hundreds of guests, the approach is always the same. Understand the room, earn the trust, and make what matters actually land.</p>
       </div>
     </div>
   </div>
@@ -646,7 +918,7 @@
       <div class="club-num">01</div>
       <div class="club-body">
         <h3>RELECTRIC — MECHANICAL TEAM MEMBER</h3>
-        <p>UCalgary student team developing electric conversion technology for gasoline vehicles. As a Mechanical Sub-Team member, I collaborated on the design, prototyping, and integration of drivetrain and chassis components — applying machine design, materials science, and manufacturing principles to a real road-going vehicle.</p>
+        <p>Relectric is UCalgary's student engineering team working to convert conventional gasoline vehicles to full electric drive. As a Mechanical Sub-Team member, contributed directly to the design, prototyping, and integration of drivetrain and chassis components. Every decision had to hold up to real engineering scrutiny, not just theory, making it one of the most hands-on learning experiences of the degree.</p>
       </div>
       <img class="club-item-img" src="images/Relectric.jpg" alt="Relectric" />
       <div class="club-period">Since Sep 2019</div>
@@ -655,7 +927,7 @@
       <div class="club-num">02</div>
       <div class="club-body">
         <h3>SCHULICH DYNOBYTES — PROGRAMMER</h3>
-        <p>Robotics club at Schulich focused on AI and computer vision on NAO humanoid robots. Developed Python-based algorithms for object detection, environment mapping, and autonomous decision-making — sitting at the intersection of mechanical systems and intelligent software.</p>
+        <p>Schulich Dynobytes sits at the intersection of mechanical engineering and artificial intelligence, using NAO humanoid robots as the platform. Developed Python algorithms for object detection, spatial mapping, and autonomous decision-making, giving the robot the ability to perceive and respond to its environment. Working in this space made one thing clear: the future of mechanical systems is inseparable from the software that drives them.</p>
       </div>
       <img class="club-item-img" src="images/Robotics.jpg" alt="Schulich Dynobytes" />
       <div class="club-period">Since Jan 2020</div>
@@ -676,7 +948,7 @@
       <div class="interest-card-body">
         <span class="interest-icon">🎸</span>
         <h3>MUSIC</h3>
-        <p>Self-taught guitarist and singer since 2011. Won "Desi's Got Talent" in 2019 at UCalgary and has since performed at multiple university events and radio shows. Music is how the engineer's brain switches off.</p>
+        <p>Self-taught guitarist and vocalist since 2011, with YouTube as the only teacher and stubbornness as the method. Won Desi's Got Talent at UCalgary in 2019 and has since performed at campus events and radio shows. Music is not so much a hobby as a necessary counterweight to engineering.</p>
       </div>
     </div>
     <div class="interest-card reveal reveal-delay-2" onclick="openModal('sports')">
@@ -684,7 +956,7 @@
       <div class="interest-card-body">
         <span class="interest-icon">🏏</span>
         <h3>SPORTS</h3>
-        <p>Right-hand medium-fast bowler for <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League (CDCL). Squash obsessive. Also plays badminton, table tennis, football, and tennis.</p>
+        <p>Right-hand medium-fast bowler for <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League, with cricket roots going back to childhood in Bangladesh. Equally passionate about squash, an obsession that started in first year at UCalgary and never let go. Badminton, table tennis, football, and tennis round out the rest.</p>
       </div>
     </div>
     <div class="interest-card reveal reveal-delay-3" onclick="openModal('cars')">
@@ -692,7 +964,7 @@
       <div class="interest-card-body">
         <span class="interest-icon">🚗</span>
         <h3>CAR ENTHUSIAST</h3>
-        <p>Japanese sports car fanboy turned European driver — currently behind the wheel of a 2008 BMW 323i. Loves hands-on maintenance. Dream car: 1998 Nissan Skyline GTR R34.</p>
+        <p>Grew up on Initial D and Tokyo Drift and the obsession never left. Recently crossed over from Japanese to European, currently driving a 2008 BMW 323i picked up on a trip to Vancouver. Comfortable with hands-on maintenance and genuinely enjoys working on vehicles. The dream car remains the 1998 Nissan Skyline GTR R34, with the Lamborghini slowly becoming the more realistic alternative.</p>
       </div>
     </div>
     <div class="interest-card reveal reveal-delay-4" onclick="openModal('watches')">
@@ -700,7 +972,7 @@
       <div class="interest-card-body">
         <span class="interest-icon">⌚</span>
         <h3>WATCH COLLECTOR</h3>
-        <p>A grandfather's 1966 Omega Constellation started it all. Proud owner of an <strong style="color:var(--text)">Omega Seamaster 300m Chronograph</strong> (2017). The dream piece: Patek Philippe Nautilus 5711.</p>
+        <p>It started with a grandfather's 1966 Omega Constellation and a feeling that was impossible to put into words. The collection that followed moved from Seikos and Orients into Swiss territory, arriving at an <strong style="color:var(--text)">Omega Seamaster Professional 300m Chronograph</strong> in 2017, one of the most satisfying purchases of a life spent working toward things worth having. Next target: Patek Philippe Nautilus 5711.</p>
       </div>
     </div>
   </div>
@@ -731,7 +1003,7 @@
     <div class="contact-grid reveal reveal-delay-2">
       <div class="contact-item">
         <div class="contact-item-label">Email</div>
-        <a href="/cdn-cgi/l/email-protection#fd8f9c95949c93d3948e919c90ccbd9a909c9491d39e9290"><span class="__cf_email__" data-cfemail="a4d6c5cccdc5ca8acdd7c8c5c995e4c3c9c5cdc88ac7cbc9">[email&#160;protected]</span></a>
+        <a href="mailto:rahian.islam1@gmail.com">rahian.islam1@gmail.com</a>
       </div>
       <div class="contact-item">
         <div class="contact-item-label">Phone</div>
@@ -771,37 +1043,452 @@
 </footer>
 
 <script>
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  /* ═══════════════════════════════════════════════════════
+     PORTFOLIO — ENHANCED JS
+     Order: Loader → Lenis → Cursor → Progress → Particles
+            → GSAP → Counters → Tilt → Magnetic → Active Nav
+  ═══════════════════════════════════════════════════════ */
 
-  const nav = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    nav.style.padding = window.scrollY > 60 ? '.8rem 4rem' : '1.25rem 4rem';
-  });
+  (function () {
+    const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const IS_TOUCH = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    /* ── LOADER ─────────────────────────────────── */
+    const loader = document.getElementById('loader');
+    let pageReady = false, timerDone = false;
+
+    function tryReveal() {
+      if (!pageReady || !timerDone) return;
+      loader.classList.add('hidden');
+      startAllAnimations();
+    }
+
+    if (REDUCED) {
+      loader.style.display = 'none';
+      startAllAnimations();
+    } else {
+      window.addEventListener('load', () => { pageReady = true; tryReveal(); });
+      setTimeout(() => { timerDone = true; tryReveal(); }, 1200);
+    }
+
+    /* ── MASTER INIT ─────────────────────────────── */
+    function startAllAnimations() {
+      initProgressBar();
+      if (!IS_TOUCH && !REDUCED) initCursor();
+      if (!REDUCED) initParticles();
+      initLenis();
+      initGSAP();
+      initCounters();
+      if (!IS_TOUCH && !REDUCED) initTilt();
+      if (!IS_TOUCH && !REDUCED) initMagnetic();
+      initActiveNav();
+    }
+
+    /* ── PROGRESS BAR ────────────────────────────── */
+    function initProgressBar() {
+      const bar = document.getElementById('progress-bar');
+      function update() {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = max > 0 ? (window.scrollY / max * 100) + '%' : '0%';
+      }
+      window.addEventListener('scroll', update, { passive: true });
+    }
+
+    /* ── CUSTOM CURSOR ───────────────────────────── */
+    function initCursor() {
+      const dot  = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      let mx = -200, my = -200, rx = -200, ry = -200;
+
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      document.addEventListener('mouseleave', () => { dot.classList.add('hidden'); ring.classList.add('hidden'); });
+      document.addEventListener('mouseenter', () => { dot.classList.remove('hidden'); ring.classList.remove('hidden'); });
+
+      (function tick() {
+        dot.style.left  = mx + 'px'; dot.style.top  = my + 'px';
+        rx += (mx - rx) * 0.11;     ry += (my - ry) * 0.11;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(tick);
+      })();
+
+      const hoverEls = 'a, button, .btn, .interest-card, .ent-card, .exp-entry, .skill-pill, .social-link, .contact-item';
+      document.querySelectorAll(hoverEls).forEach(el => {
+        el.addEventListener('mouseenter', () => { dot.classList.add('hovered'); ring.classList.add('hovered'); });
+        el.addEventListener('mouseleave', () => { dot.classList.remove('hovered'); ring.classList.remove('hovered'); });
+      });
+    }
+
+    /* ── CANVAS PARTICLES ────────────────────────── */
+    function initParticles() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [];
+      const mouse = { x: null, y: null };
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+
+      function Particle() {
+        this.reset = function () {
+          this.x  = Math.random() * W;
+          this.y  = Math.random() * H;
+          this.vx = (Math.random() - .5) * .28;
+          this.vy = (Math.random() - .5) * .28;
+          this.r  = Math.random() * 1.4 + .4;
+          this.a  = Math.random() * .35 + .08;
+        };
+        this.reset();
+        this.update = function () {
+          this.x += this.vx; this.y += this.vy;
+          if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) this.reset();
+        };
+        this.draw = function () {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(201,151,58,' + this.a + ')';
+          ctx.fill();
+        };
+      }
+
+      const COUNT = Math.min(75, Math.floor(W * H / 14000));
+      for (let i = 0; i < COUNT; i++) { const p = new Particle(); particles.push(p); }
+
+      const LINK_DIST  = 130;
+      const MOUSE_DIST = 190;
+
+      function loop() {
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d  = Math.sqrt(dx * dx + dy * dy);
+            if (d < LINK_DIST) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = 'rgba(201,151,58,' + ((1 - d / LINK_DIST) * 0.1) + ')';
+              ctx.lineWidth = .5;
+              ctx.stroke();
+            }
+          }
+          if (mouse.x !== null) {
+            const dx = particles[i].x - mouse.x;
+            const dy = particles[i].y - mouse.y;
+            const d  = Math.sqrt(dx * dx + dy * dy);
+            if (d < MOUSE_DIST) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = 'rgba(201,151,58,' + ((1 - d / MOUSE_DIST) * 0.22) + ')';
+              ctx.lineWidth = .7;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    /* ── LENIS SMOOTH SCROLL ─────────────────────── */
+    function initLenis() {
+      if (typeof Lenis === 'undefined') return;
+      const lenis = new Lenis({
+        duration: 1.15,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothTouch: false
+      });
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(t => lenis.raf(t * 1000));
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+      }
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -80 }); }
+        });
+      });
+    }
+
+    /* ── GSAP ANIMATIONS ─────────────────────────── */
+    function initGSAP() {
+      if (typeof gsap === 'undefined') { initFallbackReveal(); return; }
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* HERO NAME — char split */
+      const heroName = document.querySelector('.hero-name');
+      if (heroName) {
+        const rawHTML = heroName.innerHTML;
+        /* split each text node into individual letter spans */
+        const split = rawHTML.replace(/(<br\s*\/?>)/gi, '|BR|')
+                             .replace(/<span>/gi, '|OPEN|')
+                             .replace(/<\/span>/gi, '|CLOSE|');
+        const parts = split.split('');
+        let inside = false, out = '';
+        for (let i = 0; i < parts.length; i++) {
+          const ch = parts.slice(i).join('');
+          if (ch.startsWith('|BR|'))    { out += '<br>'; i += 3; continue; }
+          if (ch.startsWith('|OPEN|'))  { inside = true;  out += '<span>'; i += 5; continue; }
+          if (ch.startsWith('|CLOSE|')) { inside = false; out += '</span>'; i += 6; continue; }
+          if (parts[i] === ' ') { out += '<span class="hc" style="display:inline-block">&nbsp;</span>'; }
+          else { out += '<span class="hc" style="display:inline-block;opacity:0;transform:translateY(110%)">' + parts[i] + '</span>'; }
+        }
+        heroName.innerHTML = out;
+        gsap.to('.hero-name .hc', {
+          opacity: 1, y: 0,
+          duration: .65, ease: 'power3.out',
+          stagger: .038, delay: .05
+        });
+      }
+
+      /* HERO other elements */
+      gsap.fromTo('.hero-label',  { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: .55, delay: .18, ease: 'power2.out' });
+      gsap.fromTo('.hero-title',  { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: .55, delay: .82, ease: 'power2.out' });
+      gsap.fromTo('.hero-cta',    { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: .55, delay: 1.0, ease: 'power2.out' });
+      gsap.fromTo('.hero-scroll', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .5,  delay: 1.2, ease: 'power2.out' });
+      gsap.fromTo('.hero-stats',  { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .5,  delay: 1.1, ease: 'power2.out' });
+
+      /* SECTION REVEALS */
+      document.querySelectorAll('.reveal').forEach(el => {
+        /* avoid double-animating hero elements */
+        if (el.closest('#hero')) return;
+        gsap.fromTo(el,
+          { opacity: 0, y: 32 },
+          { opacity: 1, y: 0, duration: .75, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 89%', toggleActions: 'play none none none' } });
+      });
+
+      /* SECTION TITLES — slide in from left */
+      document.querySelectorAll('h2.section-title').forEach(el => {
+        gsap.fromTo(el,
+          { opacity: 0, x: -50 },
+          { opacity: 1, x: 0, duration: .85, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 87%' } });
+      });
+
+      /* IMAGE CLIP-PATH WIPES */
+      const imgSelectors = [
+        '.about-img-frame img',
+        '.interest-card-img',
+        '.ent-card-img',
+        '.ent-card-img-row img',
+        '.club-item-img'
+      ].join(',');
+      document.querySelectorAll(imgSelectors).forEach(img => {
+        gsap.fromTo(img,
+          { clipPath: 'inset(0 100% 0 0)' },
+          { clipPath: 'inset(0 0% 0 0)', duration: 1.05, ease: 'power3.inOut',
+            scrollTrigger: { trigger: img, start: 'top 88%', toggleActions: 'play none none none' } });
+      });
+
+      /* EXPERIENCE ENTRIES — alternating slide */
+      document.querySelectorAll('.exp-entry').forEach(entry => {
+        const x = entry.classList.contains('flip') ? 70 : -70;
+        gsap.fromTo(entry,
+          { opacity: 0, x: x },
+          { opacity: 1, x: 0, duration: .9, ease: 'power3.out',
+            scrollTrigger: { trigger: entry, start: 'top 82%' } });
+      });
+
+      /* SKILL PILLS — stagger pop */
+      gsap.fromTo('.skill-pill',
+        { opacity: 0, scale: .8 },
+        { opacity: 1, scale: 1, duration: .38, ease: 'back.out(1.7)', stagger: .035,
+          scrollTrigger: { trigger: '#skills .skills-grid', start: 'top 80%' } });
+
+      /* TAGS — stagger */
+      gsap.fromTo('.tag',
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: .4, ease: 'power2.out', stagger: .06,
+          scrollTrigger: { trigger: '.about-tags', start: 'top 88%' } });
+
+      /* CONTACT ITEMS */
+      gsap.fromTo('.contact-item',
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: .5, ease: 'power2.out', stagger: .1,
+          scrollTrigger: { trigger: '.contact-grid', start: 'top 85%' } });
+
+      /* SOCIAL LINKS */
+      gsap.fromTo('.social-link',
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: .45, ease: 'power2.out', stagger: .08,
+          scrollTrigger: { trigger: '.social-links', start: 'top 90%' } });
+
+      /* FOOTER */
+      gsap.fromTo('footer',
+        { opacity: 0 },
+        { opacity: 1, duration: .6, ease: 'power2.out',
+          scrollTrigger: { trigger: 'footer', start: 'top 95%' } });
+    }
+
+    /* fallback if GSAP doesn't load */
+    function initFallbackReveal() {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'none'; } });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      document.querySelectorAll('.hero-label,.hero-name,.hero-title,.hero-cta,.hero-scroll,.hero-stats')
+        .forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    }
+
+    /* ── COUNTER ANIMATION ───────────────────────── */
+    function initCounters() {
+      const stats = document.querySelectorAll('.stat-num');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          const el = entry.target;
+          const raw = el.textContent.trim();
+          const suffix = raw.replace(/[\d.]/g, '');
+          const target = parseFloat(raw);
+          if (isNaN(target)) return;
+          const decimals = raw.includes('.') ? (raw.split('.')[1] || '').length : 0;
+          const dur = 1600;
+          const t0 = performance.now();
+          (function frame(now) {
+            const prog = Math.min((now - t0) / dur, 1);
+            const ease = 1 - Math.pow(1 - prog, 3);
+            el.textContent = (ease * target).toFixed(decimals) + suffix;
+            if (prog < 1) requestAnimationFrame(frame);
+            else el.textContent = raw;
+          })(t0);
+        });
+      }, { threshold: .6 });
+      stats.forEach(s => io.observe(s));
+    }
+
+    /* ── 3D TILT ─────────────────────────────────── */
+    function initTilt() {
+      const TILT_MAX = 9;
+      document.querySelectorAll('.ent-card, .interest-card, .contact-item').forEach(el => {
+        el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
+        el.addEventListener('mousemove', e => {
+          const r  = el.getBoundingClientRect();
+          const dx = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
+          const dy = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
+          el.style.transform = `perspective(700px) rotateY(${dx * TILT_MAX}deg) rotateX(${-dy * TILT_MAX}deg) translateZ(10px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transition = 'transform .55s cubic-bezier(.25,.46,.45,.94)';
+          el.style.transform  = 'perspective(700px) rotateY(0deg) rotateX(0deg) translateZ(0px)';
+        });
+      });
+    }
+
+    /* ── MAGNETIC BUTTONS ────────────────────────── */
+    function initMagnetic() {
+      document.querySelectorAll('.btn, .social-link').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+          const r  = btn.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width  / 2);
+          const dy = e.clientY - (r.top  + r.height / 2);
+          btn.style.transform = `translate(${dx * 0.28}px, ${dy * 0.28}px)`;
+          btn.style.transition = 'none';
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform  = '';
+          btn.style.transition = 'transform .45s cubic-bezier(.25,.46,.45,.94), background .25s, color .25s, border-color .25s, box-shadow .25s';
+        });
+      });
+    }
+
+    /* ── ACTIVE NAV ──────────────────────────────── */
+    function initActiveNav() {
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const nav = document.querySelector('nav');
+
+      /* compact nav on scroll */
+      window.addEventListener('scroll', () => {
+        nav.style.padding = window.scrollY > 60 ? '.8rem 4rem' : '1.25rem 4rem';
+      }, { passive: true });
+
+      /* section highlight */
+      const sections = document.querySelectorAll('section[id]');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          navLinks.forEach(a => {
+            const match = a.getAttribute('href') === '#' + entry.target.id;
+            a.classList.toggle('nav-active', match);
+          });
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(s => io.observe(s));
+    }
+
+  })();
+
+  // ── SLIDESHOW ──
+  (function () {
+    function initSlideshow(id, intervalMs) {
+      const wrap = document.getElementById(id);
+      if (!wrap) return;
+      const slides  = wrap.querySelectorAll('.slide');
+      const dots    = wrap.querySelectorAll('.slide-dot');
+      const counter = document.getElementById(id + '-counter');
+      const total   = slides.length;
+      let current   = 0;
+      let timer     = null;
+
+      function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = ((n % total) + total) % total;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        if (counter) counter.textContent = (current + 1) + ' / ' + total;
+      }
+
+      function start() { timer = setInterval(() => goTo(current + 1), intervalMs || 3500); }
+      function stop()  { clearInterval(timer); }
+      function reset() { stop(); start(); }
+
+      wrap.querySelector('.slide-prev').addEventListener('click', () => { goTo(current - 1); reset(); });
+      wrap.querySelector('.slide-next').addEventListener('click', () => { goTo(current + 1); reset(); });
+      dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); reset(); }));
+
+      wrap.addEventListener('mouseenter', stop);
+      wrap.addEventListener('mouseleave', start);
+
+      start();
+    }
+
+    initSlideshow('tc-turbo-slide', 3500);
+  })();
 
   // ── INTEREST MODAL DATA ──
   const modalData = {
     music: {
       img: 'images/Music.jpg',
       title: 'MUSIC',
-      text: `I've been a self-taught guitarist and singer since 2011 — YouTube was my music school. My father bought me my first guitar but refused formal lessons, believing it would distract from studies. That only made me more determined. After years of practicing, I entered <strong style="color:var(--text)">"Desi's Got Talent"</strong> in 2019, a show co-hosted by the Indian Students' Association and the Bengali Students' Society at the University of Calgary — and won. Since then I've been invited to perform at multiple campus events and radio shows. Music is how the engineer's brain resets.`
+      text: `Started playing guitar in 2011 with no lessons and no roadmap, just a YouTube account and a lot of stubbornness. My father bought the first guitar but was convinced formal lessons would pull focus from school. That conviction backfired spectacularly. Years of practicing in my room led to entering <strong style="color:var(--text)">Desi's Got Talent</strong> in 2019, a show co-hosted by the Indian Students' Association and the Bengali Students' Society at UCalgary, and winning it. The invitations kept coming after that: campus performances, radio shows, cultural events. Music is not a break from engineering. It is the other side of the same mind.`
     },
     sports: {
       img: 'images/Cricket.jpg',
       title: 'SPORTS',
-      text: `Cricket is in the blood. Five of my maternal uncles were professional cricketers, and I followed their footsteps from age 4. I've played multiple tournaments representing my school back in Bangladesh. Currently I play as a <strong style="color:var(--text)">right-hand medium-fast bowler for St. Johns 1</strong> in the Calgary District Cricket League (CDCL). My friends introduced me to squash in first year at UCalgary — and it instantly became my favourite sport. The pandemic hit hardest because I couldn't play. I also enjoy football, badminton, table tennis, and tennis. If you play any of these, we can be best friends.`
+      text: `Cricket is not something I chose so much as something I was born into. Five maternal uncles played professionally, and I picked up a bat at age four. Multiple school tournaments in Bangladesh followed before the move to Canada, where the game continued with <strong style="color:var(--text)">St. Johns 1</strong> in the Calgary District Cricket League as a right-hand medium-fast bowler. Squash arrived in first year at UCalgary through a group of friends and immediately became the sport that produces the most unreasonable amount of satisfaction. The pandemic years hit hardest for that reason alone. Badminton, table tennis, football, and tennis fill out the rest of the roster. If you play any of them, we should talk.`
     },
     cars: {
       img: 'images/cars.jpeg',
       title: 'CAR ENTHUSIAST',
-      text: `Initial D and The Fast and the Furious: Tokyo Drift turned me into a Japanese sports car fanboy for life. I love working on cars and helping friends and family with repairs and maintenance. Recently, my friend and I flew to Vancouver to pick up our summer cars — he got a <strong style="color:var(--text)">1994 Mazda Miata MX-5</strong> and I went European this time with a <strong style="color:var(--text)">2008 BMW 323i</strong>. My dream car remains a 1998 Nissan Skyline GTR R34 — though with prices skyrocketing, a Lamborghini might be more attainable at this point.`
+      text: `Initial D and Tokyo Drift did their damage early. What started as an affection for Japanese sports cars became something more serious over time: tracking values, studying specifications, doing my own maintenance, and eventually flying to Vancouver specifically to pick up a summer car. My friend came back with a <strong style="color:var(--text)">1994 Mazda Miata MX-5</strong>. I made the unexpected pivot to European and drove home in a <strong style="color:var(--text)">2008 BMW 323i</strong>. The dream car has always been the 1998 Nissan Skyline GTR R34, though given what R34s are trading for today, a Lamborghini is starting to look like the more sensible choice.`
     },
     watches: {
       img: 'images/Watch.jpeg',
       title: 'WATCH COLLECTOR',
-      text: `My love for watches started when I saw my grandfather's <strong style="color:var(--text)">1966 Omega Constellation</strong> with a pie-pan dial. The patina, the petite case, the hand-winding movement — it completely awed me. I started collecting right after I began earning from my tutoring centre. I started with Seikos and Orients, then dove into the Swiss territory. My first luxury piece was an <strong style="color:var(--text)">Omega Seamaster Professional 300m Chronograph</strong>, acquired in 2017 — one of the proudest moments of my life and a reminder of what strong dedication can achieve. My dream watch: a Patek Philippe Nautilus 5711.`
+      text: `It began with a single watch on my grandfather's wrist: a <strong style="color:var(--text)">1966 Omega Constellation</strong> with a pie-pan dial. The patina on the case, the hand-winding movement, the way it connected decades in a single glance, it produced a feeling I have never quite been able to explain. The obsession that followed was methodical. Seikos and Orients came first, then the Swiss brands, then the research that made each purchase feel genuinely earned. In 2017, the first serious piece arrived: an <strong style="color:var(--text)">Omega Seamaster Professional 300m Chronograph</strong>, acquired through years of building something from nothing. Few purchases have meant as much. The next goal is a Patek Philippe Nautilus 5711, which will only mean something if the journey to it is just as deliberate.`
     }
   };
 
